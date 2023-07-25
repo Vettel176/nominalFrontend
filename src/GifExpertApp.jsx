@@ -51,8 +51,8 @@ export const GifExpertApp = () =>{
    
   return (
     <>
-      <h1> GifExpertApp</h1>
-      <h4>Configuracion MAP</h4>
+      <h1> Bienvenido a Proyecto 24 </h1>
+      <h4>En lo que hacemos algo puedes buscar gifts divertidos. Adelante, ACM1PT</h4>
 
         <AddCategory onNewValue = {(valueSend) => onEnterAddCategoryBox(valueSend)}
                      />
