@@ -1,6 +1,14 @@
 import { useState } from "react"
-import { AddCategory } from "./componets/AddCategory";
-import { GifGrid } from "./componets/GifGrid";
+import { AddCategory, GifGrid } from "./componets";
+import { Route, Routes} from "react-router-dom";
+import  Layout from  "./pages/Layout";
+import  Login  from  "./pages/Login";
+import  Default from  "./pages/Default"; 
+
+
+//se importan los 2 de abajo de un jalon. con archivo de barril
+//import { AddCategory } from "./componets/AddCategory";
+//import { GifGrid } from "./componets/GifGrid";
 
 
 //.....Contenido GifExpertApp.... ///
@@ -12,11 +20,9 @@ import { GifGrid } from "./componets/GifGrid";
 
 //GifGrid 
 export const GifExpertApp = () =>{
-
+  console.log(" COMPONENTE PRINCIPAL al cargar la pagina  GiftExperApp");
   const [categories, setCategories] = useState(['Gran Turismo']);
-    console.log(" LOG GifExpertApp      "+ categories);
-
-  
+   
     //Se oprime Enter y se Valida si el texto ingresado se encuentra en el arreglo 
     //Si no lo contiene se agrega  al principio del arreglo
     const onEnterAddCategoryBox = (onNewValue) => {
@@ -25,44 +31,24 @@ export const GifExpertApp = () =>{
       setCategories( [ onNewValue, ...categories]);
     }
 
-    // const array1 = [1, 4, 9, 16];
-    // const myMap = new Map([
-    //   [1, "one"],
-    //   [3, "three"],
-    // ]);
-    // const myMapValues = new Map();
-
-    // myMap.set('2', {tamaño: 23, stilo:"Barroco"});
-    // // Pass a function to map
-    // const map1 = array1.map(x => x *2);
-
-    // console.log("Te pinto el siguiente MAP");
-    // console.log(myMap);
-    // console.log("Obteniendo las Keys");
-    // console.log(myMap.keys())
-    // console.log("Imptesion Valires de Mamp Mediante FOR")
-    // for(const item  of myMap){
-    //   console.log(item);
-    // }
-    // console.log("Impresion Variables Separadas");
-    // for(const [key,value] of myMap){
-    //   console.log(key, value);
-    // }
    
   return (
     <>
-      <h1> Bienvenido a Proyecto 24 </h1>
-      <h4>En lo que hacemos algo puedes buscar gifts divertidos. Adelante, ACM1PT</h4>
-
-        <AddCategory onNewValue = {(valueSend) => onEnterAddCategoryBox(valueSend)}
-                     />
+    <div>
+      <Routes>
+        <Route path="/" element = {<Layout/>} > </Route>
+        <Route path="/loginLista" element = {<Login.Login/>} > </Route>
+        <Route path="/*" element = {<Default/>} > </Route>
+      </Routes>
+      <hr />
+    </div> 
+        {/* <AddCategory onNewValue = {(valueSend) => onEnterAddCategoryBox(valueSend)}/>
         
         {categories.map(category => (
             <GifGrid key={category}
                      category={category}/>
         ))
-        }
-
+        } */}
     </>  
   )
 } 

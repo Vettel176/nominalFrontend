@@ -1,29 +1,18 @@
-import { useEffect, useState } from 'react';
-import { getGifts } from './helpers/getGifts';
 import { GiftItem } from './GiftItem';
+import { useFetchGifs } from '../hooks/useFetchGifs';
+
 
 export const GifGrid = ({ category}) => {
-    console.log("Que quieres que te pinte??   "+ category);
-
-    const [images, setImages] = useState([]);
-
-    const getImages = async() => {
-        const newImages = await getGifts(category);
-        setImages(newImages);
-    }
-
-    useEffect (() => {
-    console.log("¿Si me llama?");
-       //getGifts (category)
-       //.then (newImages => setImages(newImages));
-        getImages();
-    },[])
-
+    //Se implementa un CustomHook
+    const { images, isLoading } = useFetchGifs ( category );
     return (
         <>
             <h3>
                 {category}
             </h3>
+                {isLoading ? (<h2>Cargando... </h2>) : null}         
+                
+            
             <div className='card-grid'>
                 {
                     images.map((card) => (

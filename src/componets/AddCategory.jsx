@@ -6,10 +6,10 @@ import { useState } from "react"
 
 export const AddCategory = ({onNewValue}) =>{
 
-    const [inputValue, setInputValue] = useState('');
+    const [inputValue, setInputValue] = useState(''); 
 
     const onInputChange = (event) => {
-        //console.log(event.target.value);
+        console.log("Cuantas veces?");
         setInputValue(event.target.value);   
     }
     const onSubmit = (event) =>{

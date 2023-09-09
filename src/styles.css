@@ -1,10 +1,22 @@
-* {
-    font-family: Helvetica, Arial, sans-serif;
-    background-color: rgb(234, 234, 234);
-  }
+
   
   body {
-    padding: 60px;
+    padding: 60px; 
+  }
+
+  a:link, a:visited {
+    background-color: #103bc7;
+    color: white;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    border: 2px solid rgb(110, 204, 22);
+    border-radius: 5px;
+    display: inline-block;
+  }
+  
+  a:hover, a:active {
+    background-color: rgb(24, 5, 131);
   }
   
   input {
