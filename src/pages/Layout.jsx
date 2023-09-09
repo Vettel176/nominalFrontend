@@ -1,5 +1,4 @@
 import { Outlet , Link } from "react-router-dom"
-import '../../dist/assets/css/bootstrap/css/bootstrap.css';
 
 const Layout = () => {
     return (
