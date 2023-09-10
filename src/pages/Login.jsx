@@ -99,7 +99,7 @@ const Login = () => {
                     <div className="col-md-3"></div>
             </form>
 
-            <div style={{display: 'block', width: 700, padding: 30}}>
+            <div className='d-block Width 30%'>
                 <Modal isOpen={modal}
                     toggle={toggle}
                     modalTransition={{ timeout: 200 }}>
