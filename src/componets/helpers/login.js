@@ -1,7 +1,7 @@
 
 export const getToken = async (u, p) =>{
     console.log("Valores que llegan para el Login: "+u+" y: "+p);
-        const url = `http://letmepass.up.railway.app/login`;
+        const url = `https://letmepass.up.railway.app/login`;
         const data = {
             name : u,
             pass : p
