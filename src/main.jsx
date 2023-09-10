@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {GifExpertApp} from './GifExpertApp.jsx';
 import { StyledEngineProvider } from '@mui/material/styles';
+import "bootstrap/dist/css/bootstrap.css";
 import  './styles.css';
 
 import { BrowserRouter } from 'react-router-dom';
