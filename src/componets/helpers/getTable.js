@@ -1,6 +1,7 @@
 export const getTable = async (token, n, ap, am) =>{
     console.log("Method Table");
-        const url = `https://letmepass.up.railway.app/api/lista`; 
+        const url = `https://letmepass.up.railway.app/nominal/lista`; 
+        //const url = `http://localhost:3000/nominal/lista`; 
         const data = {
             name : n,
             apepat : ap,

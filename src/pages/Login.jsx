@@ -99,10 +99,11 @@ const Login = () => {
                     <div className="col-md-3"></div>
             </form>
 
-            <div className='d-block Width 30%'>
+            <div>
                 <Modal isOpen={modal}
                     toggle={toggle}
-                    modalTransition={{ timeout: 200 }}>
+                    modalTransition={{ timeout: 200 }}
+                    size="lg" style={{maxWidth: '500px', width: '50%'}}>
                     <ModalHeader
                         toggle={toggle}>Mensaje
                     </ModalHeader>
