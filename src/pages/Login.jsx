@@ -1,9 +1,10 @@
 
 import  getToken  from '../componets/helpers/login';
-import  getTable from '../componets/helpers/getTable'
+import  getValidateToken from '../componets/helpers/loginValidate'
 import { NominalTable } from './nominalTable';
 import { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom";
 import { Button, Modal, ModalFooter, ModalHeader, ModalBody } from "reactstrap";
 
 let token = null;
@@ -14,13 +15,15 @@ const setToken = newToken =>{
 }
 
 
-
 const Login = () => {
     console.log("Cargando el Componente LOGIN redireccionado por la URL")
     const [modal, setModal] = useState(false);
+    const [modalS, setModalS] = useState(false);
+    const [msjToken, setMsjToken] = useState(false);
     const [tokenStorage, setTokenStorage] = useState(false);
+    const navigate = useNavigate();
 
-    useEffect(() => {
+    useEffect( ()  => {
         console.log("Use Effect del  Componente LOGIN obtengo Token")
         console.log("Variable token en Storage: " +window.localStorage.getItem('tokenLogin')+ "<--")
         if(window.localStorage.getItem('tokenLogin') == null){
@@ -28,13 +31,62 @@ const Login = () => {
             setTokenStorage(false);
         }else{
             console.log("Quesegun ya existe")
-            setTokenStorage(true);
-        }   
+            setTokenStorage(true); 
+            console.log("Validar Sesion")
+            const funcValidaToken = async () => {
+                const validaToken = await getValidateToken(window.localStorage.getItem('tokenLogin'));
+                const {msj, status} = validaToken
+                console.log("Tiene el Mensaje"+msj+ "mira  "+status)
+                if(validaToken.status == 900){
+                    console.log("Token Valido")
+                }else{
+                        console.log("Token Invalido"+validaToken.status)
+                        window.localStorage.removeItem('tokenLogin');
+                        toggleS();
+                        setMsjToken(validaToken.msj)
+                        navigate("/");
+                }
+            }
+              funcValidaToken()
+                // make sure to catch any error
+                .catch(console.error);
+            }
+            // try{
+            //     const validaToken = loginValidate(window.localStorage.getItem('tokenLogin'));
+            //         if(validaToken.status == 900){
+            //             console.log("Token Valido")
+            //         }else{
+            //             console.log("Token vALIO vegaaaaaaaaaaaa"+validaToken.status)
+            //             window.localStorage.removeItem('tokenLogin');
+            //             toggleS();
+            //             setMsjToken(validaToken.msj)
+            //             navigate("/");
+            //             }
+            //     }catch(e){
+            //         console.log("Error espectral al validar el TOKEN:"+validarToken);
+            //     }
+           
     },[])
 
+    const validarToken = async () =>{
+        try{
+        const validaToken = await getValidateToken(tokenStorage);
+            if(validaToken.status == 900){
+                console.log("Token Valido")
+            }else{
+                window.localStorage.removeItem('tokenLogin');
+                toggleS();
+                setMsjToken(validaToken.msj)
+                navigate("/");
+                }
+        }catch(e){
+            console.log("Error espectral al validar el TOKEN:"+validarToken);
+        }
+    }
     
 
     const toggle = () => setModal(!modal);
+    const toggleS = () => setModalS(!modalS);
 
     const {
         register,
@@ -115,6 +167,23 @@ const Login = () => {
                     </ModalFooter>
                 </Modal>
             </div >
+            <div>
+            <Modal isOpen={modalS}
+                    toggle={toggleS}
+                    modalTransition={{ timeout: 100 }}
+                    size="lg" style={{maxWidth: '500px', width: '50%'}}>
+                    <ModalHeader
+                        toggle={toggleS}>Mensaje
+                    </ModalHeader>
+                    <ModalBody>
+                       La sesion no es Valida: {msjToken}
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="primary" onClick={toggleS}>Aceptar</Button>
+                    </ModalFooter>
+                </Modal>
+
+            </div>
         </div>
     )
 

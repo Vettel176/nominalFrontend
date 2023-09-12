@@ -68,8 +68,8 @@ export const NominalTable = () => {
   }
 
   const onClickAfiliar = ({target}) =>{
-    console.log("Value::"+target.value);
-    console.log("NAME::"+target.name);
+    // console.log("Value::"+target.value);
+    // console.log("NAME::"+target.name);
     setIdAfiliado(target.value);
     setNameAfiliado(target.name);
     toggleA();
@@ -79,8 +79,15 @@ export const NominalTable = () => {
   const [nameAfiliado, setNameAfiliado] = useState('');
 
   const onClickSiAfiliar = async () => {
-    const afil  = await setAfiliacion(nameAfiliado);
+
+    try{
+    const afil  = await getAfiliacion(idAfiliado);
     console.log("Respuesta Afiliacion"+ afil)
+    onClickConsult();
+    
+    }catch(e){
+      console.log("Ocurrio un erro espectral al afiliar:"+e)
+    }
     toggleA();
   }
 
@@ -133,16 +140,18 @@ export const NominalTable = () => {
                         <td>{ClaveElector}</td>
                         <td>{direccion}</td>
                         <td>{telefono}</td>
-                        <td>{vota_pt}</td>
-                      <td><button className='btn btn-success' value={id} name={nombres} onClick={(e) => (async () => {
-    try {
-      const invoices = await getAfiliacion(id);
-    } catch (e) {
-
-    }
-  })()} 
- >Afiliar</button></td>
-                      </tr>
+                        <td>{vota_pt  == 1 ? "Afiliado" : "No afiliado" }</td>
+                        <td>{vota_pt  == 0 ? <button className='btn btn-success'  value={id} name={nombres}
+                            onClick={onClickAfiliar}>Afiliar</button> : <p> </p> }</td>
+                        {/* <td><button className='btn btn-success' value={id} name={nombres} onClick={(e) => (async () => {
+                               try {
+                                 const invoices = await getAfiliacion(id);
+                               } catch (e) {
+                                console.log("Ocurrio un erro espectral al afiliar:"+e)
+                               }
+                             })()} 
+                            >Afiliar</button></td> */}
+                        </tr>
                                 ))}
                     </tbody>
                   </table>
