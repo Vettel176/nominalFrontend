@@ -10,6 +10,8 @@ import getAfiliacion from '../componets/helpers/getAfiliacion';
 
 
 export const NominalTable = () => {
+  const back = "<";
+  const front = ">";
   const navigate = useNavigate();
   const [modal, setModal] = useState(false);
   const [modalA, setModalA] = useState(false);
@@ -17,25 +19,15 @@ export const NominalTable = () => {
   const [user, setUser] = useState(null);
   const [currentPage, setCurrenPage] = useState(0);
   const [search, setSearch] = useState('');
-  const [dataConsult, setDaConsult] = useState({});
+  const [dataExist, setDataExist] = useState(0);
 
 
 
   useEffect(() => {
     setUser(window.localStorage.getItem('nameUser'));
+    setDataExist(0);
   },[])
   
-  const onClickConsult = async () => {
-    try{
-      const table  = await getTable(dataConsult);
-      console.log(table[0].id);3
-      setFilas(table);
-    }catch(e){
-      console.log("Error Espectrial al consultar la tabla:"+e)
-
-    }
-  }
-
   const toggle = () => setModal(!modal);
   const toggleA = () => setModalA(!modalA);
 
@@ -66,10 +58,13 @@ export const NominalTable = () => {
     try{
     const serviceConsulta = await getTable(nombre, appat,apmat);
         if(serviceConsulta.length > 0){
+            setDataExist(1);
             console.log("Imprimiendo los datos de la consulta::");
             console.log(serviceConsulta);
             setFilas(serviceConsulta);
+            
         }else{
+            setDataExist(2);
             console.log("Sin resultados en la consulta");
             console.log(serviceConsulta);
             setFilas(serviceConsulta);
@@ -100,11 +95,11 @@ export const NominalTable = () => {
     setCurrenPage(currentPage - 5);
   }
 
-  const onSearchChange = ({target}) =>{
-    setCurrenPage(0)
-    setSearch (target.value)
-    console.log("Valor del Input"+ target.value)
-  }
+  // const onSearchChange = ({target}) =>{
+  //   setCurrenPage(0)
+  //   setSearch (target.value)
+  //   console.log("Valor del Input"+ target.value)
+  // }
 
   const onClickAfiliar = ({target}) =>{
     // console.log("Value::"+target.value);
@@ -118,11 +113,23 @@ export const NominalTable = () => {
   const [nameAfiliado, setNameAfiliado] = useState('');
 
   const onClickSiAfiliar = async () => {
-
+    let nuevasFilas = {};
     try{
     const afil  = await getAfiliacion(idAfiliado);
-    console.log("Respuesta Afiliacion"+ afil)
-    onClickConsult();
+    const {actualizados, idAfiliacion} = afil;
+
+    console.log("Respuesta Afiliacion Afectadas: "+ actualizados +"El ID es: " +idAfiliacion);
+    if(actualizados == 1){
+      console.log("Se encontro alguien")
+      //console.log("Filas: "+filas)
+      nuevasFilas = filas.map(function(regis){
+        if(regis.id == idAfiliacion){
+           regis.vota_pt = 1;
+        }
+        return regis;
+      })
+      //console.log("Filas Actualizadas:"+nuevasFilas)
+    }
     
     }catch(e){
       console.log("Ocurrio un erro espectral al afiliar:"+e)
@@ -130,6 +137,54 @@ export const NominalTable = () => {
     toggleA();
   }
 
+  const tableView = (
+    <>
+    <button className='btn btn-primary' onClick={backPage}>{back}</button>
+    &nbsp;
+    <button className='btn btn-primary' onClick={nextPage}>{front}</button>
+    &nbsp;
+    {/* <input type="text" className='mb-5 form-control' placeholder='Buscar por nombre'
+    value={search} onChange={ onSearchChange }/> */}
+
+                <table className="table">
+                  <thead >
+                    <tr>
+                      <th>#</th>
+                      <th>Nombre</th>
+                      <th>Clave de Elector</th>
+                      <th>Dirección</th>
+                      <th>Telefono</th>
+                      <th>Afiliado</th>
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filerData().map(({id,nombres,ClaveElector,direccion,telefono,vota_pt}) =>(
+
+                      <tr key= {id}>
+                      {/* <th scope="row">1</th> */}
+                      <td>{id}</td>
+                      <td>{nombres}</td>
+                      <td>{ClaveElector}</td>
+                      <td>{direccion}</td>
+                      <td>{telefono}</td>
+                      <td>{vota_pt  == 1 ? "Afiliado" : "No afiliado" }</td>
+                      <td>{vota_pt  == 0 ? <button className='btn btn-success'  value={id} name={nombres}
+                          onClick={onClickAfiliar}>Afiliar</button> : <p> </p> }</td>
+                      {/* <td><button className='btn btn-success' value={id} name={nombres} onClick={(e) => (async () => {
+                             try {
+                               const invoices = await getAfiliacion(id);
+                             } catch (e) {
+                              console.log("Ocurrio un erro espectral al afiliar:"+e)
+                             }
+                           })()} 
+                          >Afiliar</button></td> */}
+                      </tr>
+                              ))}
+                  </tbody>
+                </table>
+                </>
+        )
 
   return (
     <>
@@ -150,64 +205,31 @@ export const NominalTable = () => {
             <div className='col-md-2 d-flex justify-content-center'>
               <button   className="btn btn-success"> Consultar </button>
             </div>
-            <div className='col-md-2 p-1'></div>
+            <div className='col-md-2 d-flex justify-content-start'>
+                  Bienvenid@ {user}
+            </div>
             <div className='col-md-2 d-flex justify-content-end'>
               <button  className="btn btn-primary" onClick={toggle}> Cerrar Sesion </button>
             </div>
         </div>
         </form>
-    <hr/>
+    {/* <hr/>
         <div className='row'>
           <div className='col-md-12 d-flex justify-content-start'>
             Bienvenid@ {user}
           </div>
-        </div>
+        </div> */}
     <hr />
     <div>
-      <button className='btn btn-primary' onClick={backPage}></button>
-      &nbsp;
-      <button className='btn btn-primary' onClick={nextPage}>Siguientes</button>
-      &nbsp;
-      <input type="text" className='mb-5 form-control' placeholder='Buscar por nombre'
-      value={search} onChange={ onSearchChange }/>
-
-                  <table className="table">
-                    <thead >
-                      <tr>
-                        <th>#</th>
-                        <th>Nombre</th>
-                        <th>Clave de Elector</th>
-                        <th>Dirección</th>
-                        <th>Telefono</th>
-                        <th>Afiliado</th>
-                        
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filerData().map(({id,nombres,ClaveElector,direccion,telefono,vota_pt}) =>(
-  
-                        <tr key= {id}>
-                        {/* <th scope="row">1</th> */}
-                        <td>{id}</td>
-                        <td>{nombres}</td>
-                        <td>{ClaveElector}</td>
-                        <td>{direccion}</td>
-                        <td>{telefono}</td>
-                        <td>{vota_pt  == 1 ? "Afiliado" : "No afiliado" }</td>
-                        <td>{vota_pt  == 0 ? <button className='btn btn-success'  value={id} name={nombres}
-                            onClick={onClickAfiliar}>Afiliar</button> : <p> </p> }</td>
-                        {/* <td><button className='btn btn-success' value={id} name={nombres} onClick={(e) => (async () => {
-                               try {
-                                 const invoices = await getAfiliacion(id);
-                               } catch (e) {
-                                console.log("Ocurrio un erro espectral al afiliar:"+e)
-                               }
-                             })()} 
-                            >Afiliar</button></td> */}
-                        </tr>
-                                ))}
-                    </tbody>
-                  </table>
+      <div>
+                {dataExist == 0 ? <div>Realice una Consulta</div> : null }
+      </div>
+      <div>
+                {dataExist == 1 ? tableView : null}
+      </div>
+      <div>
+                {dataExist == 2 ? <div>No  existen datos con los parametros de busqueda</div> : null}
+      </div>      
     </div>
             <div>
                 <Modal isOpen={modal}

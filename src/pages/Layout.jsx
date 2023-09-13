@@ -1,18 +1,20 @@
 import { Outlet , Link } from "react-router-dom"
 
-
 const Layout = () => {
     return (
-      <div>
-            <ul className="nav justify-content-center ">
-                <li className="nav-item">
+      <div className="d-flex justify-content-center p-5 text-center">
+        <a href="/" className="button-71">HOME</a>
+        <a href="/loginLista" className="button-71">Lista Nominal</a>
+
+            {/* <ul className="nav justify-content-center ">
+                <li >
                         <Link to="/" >Home</Link>
                 </li>
                 <></>
-                <li className="nav-item">
-                        <Link to="/loginLista">Lista Nominal</Link>
+                <li >
+                        <Link to="/loginLista">Lista Nominalss</Link>
                 </li>
-            </ul>
+            </ul> */}
             <Outlet/>
     </div>
     );
