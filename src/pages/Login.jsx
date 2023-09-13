@@ -34,7 +34,7 @@ const Login = () => {
             setTokenStorage(true); 
             console.log("Validar Sesion")
             const funcValidaToken = async () => {
-                const validaToken = await getValidateToken(window.localStorage.getItem('tokenLogin'));
+                const validaToken = await  getValidateToken(window.localStorage.getItem('tokenLogin'),3000);
                 const {msj, status} = validaToken
                 console.log("Tiene el Mensaje"+msj+ "mira  "+status)
                 if(validaToken.status == 900){
@@ -51,24 +51,11 @@ const Login = () => {
                 // make sure to catch any error
                 .catch(console.error);
             }
-            // try{
-            //     const validaToken = loginValidate(window.localStorage.getItem('tokenLogin'));
-            //         if(validaToken.status == 900){
-            //             console.log("Token Valido")
-            //         }else{
-            //             console.log("Token vALIO vegaaaaaaaaaaaa"+validaToken.status)
-            //             window.localStorage.removeItem('tokenLogin');
-            //             toggleS();
-            //             setMsjToken(validaToken.msj)
-            //             navigate("/");
-            //             }
-            //     }catch(e){
-            //         console.log("Error espectral al validar el TOKEN:"+validarToken);
-            //     }
            
     },[])
 
     const validarToken = async () =>{
+        console.log("validarToken...")
         try{
         const validaToken = await getValidateToken(tokenStorage);
             if(validaToken.status == 900){

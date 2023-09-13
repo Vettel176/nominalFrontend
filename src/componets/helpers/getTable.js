@@ -1,11 +1,11 @@
-export const getTable = async (token, n, ap, am) =>{
-    console.log("Method Table");
-        const url = `https://letmepass.up.railway.app/nominal/lista`; 
+export const getTable = async (nombre,appat,apmat) =>{
+    console.log("Valores llegan al getTabla: (Nombre: "+nombre+") (Apellido Paterno: "+appat+")(Apellido Materno: "+apmat+")");
+        const url = `https://letmepass.up.railway.app/nominal/lista`;  
         //const url = `http://localhost:3000/nominal/lista`; 
         const data = {
-            name : n,
-            apepat : ap,
-            apemat : am
+            name : nombre,
+            appat : appat,
+            apmat : apmat
         }
         const response = await fetch(url, {
           method: "POST", 

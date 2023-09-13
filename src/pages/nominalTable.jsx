@@ -2,6 +2,7 @@ import * as React from 'react';
 // import { DataGrid } from '@mui/x-data-grid';
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form"
 import { Button, Modal, ModalFooter, ModalHeader, ModalBody } from "reactstrap";
 import getTable from '../componets/helpers/getTable';
 import getAfiliacion from '../componets/helpers/getAfiliacion';
@@ -16,6 +17,7 @@ export const NominalTable = () => {
   const [user, setUser] = useState(null);
   const [currentPage, setCurrenPage] = useState(0);
   const [search, setSearch] = useState('');
+  const [dataConsult, setDaConsult] = useState({});
 
 
 
@@ -24,9 +26,14 @@ export const NominalTable = () => {
   },[])
   
   const onClickConsult = async () => {
-    const table  = await getTable();
-    console.log(table[0].id);
-    setFilas(table);
+    try{
+      const table  = await getTable(dataConsult);
+      console.log(table[0].id);3
+      setFilas(table);
+    }catch(e){
+      console.log("Error Espectrial al consultar la tabla:"+e)
+
+    }
   }
 
   const toggle = () => setModal(!modal);
@@ -39,6 +46,38 @@ export const NominalTable = () => {
     window.localStorage.removeItem('tokenLogin')
     navigate("/");
   }
+
+  //Boton consultar Validacion Form
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+      console.log("Consultando...INICIO: "+ data.nombre+" "+data.appat+" "+data.apmat);
+      sendConsultForm(data);
+      console.log("Consultando..FIN.")
+  }
+
+  const sendConsultForm = async (dataConsulta) => {
+    const  {nombre, appat,apmat} = dataConsulta;
+    try{
+    const serviceConsulta = await getTable(nombre, appat,apmat);
+        if(serviceConsulta.length > 0){
+            console.log("Imprimiendo los datos de la consulta::");
+            console.log(serviceConsulta);
+            setFilas(serviceConsulta);
+        }else{
+            console.log("Sin resultados en la consulta");
+            console.log(serviceConsulta);
+            setFilas(serviceConsulta);
+        }
+    }catch(e){
+        console.log("Error espectral en el servicio de Consulta: "+ e);
+    }
+}
 
 
   //filtrado
@@ -94,15 +133,29 @@ export const NominalTable = () => {
 
   return (
     <>
+        <form onSubmit={handleSubmit(onSubmit)}>
         <div className='row'>
-            <div className='col-md-5 d-flex justify-content-center'>
-              <button   className="btn btn-success" onClick={onClickConsult} > Consultar </button>
+            <div className='col-md-2 d-flex justify-content-center'>
+                <input type="text"  {...register("nombre", { required: true })} className='form-control' placeholder='Nombre'/>
+                  {errors.nombre && <span className='text-danger'>*</span>}
+            </div>
+            <div className='col-md-2 d-flex justify-content-center'>
+                <input type="text"  {...register("appat", { required: true })} className='form-control' placeholder='Apellido Paterno'/>
+                  {errors.appat && <span className='text-danger'>*</span>}
+            </div>
+            <div className='col-md-2 d-flex justify-content-center'>
+                <input type="text"  {...register("apmat", { required: true })} className='form-control' placeholder='Apellido Materno'/>
+                {errors.apmat && <span className='text-danger'>*</span>}
+            </div>
+            <div className='col-md-2 d-flex justify-content-center'>
+              <button   className="btn btn-success"> Consultar </button>
             </div>
             <div className='col-md-2 p-1'></div>
-            <div className='col-md-5 d-flex justify-content-center'>
+            <div className='col-md-2 d-flex justify-content-end'>
               <button  className="btn btn-primary" onClick={toggle}> Cerrar Sesion </button>
             </div>
         </div>
+        </form>
     <hr/>
         <div className='row'>
           <div className='col-md-12 d-flex justify-content-start'>
@@ -111,7 +164,7 @@ export const NominalTable = () => {
         </div>
     <hr />
     <div>
-      <button className='btn btn-primary' onClick={backPage}>Anteriores</button>
+      <button className='btn btn-primary' onClick={backPage}></button>
       &nbsp;
       <button className='btn btn-primary' onClick={nextPage}>Siguientes</button>
       &nbsp;
