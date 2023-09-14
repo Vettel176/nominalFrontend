@@ -1,11 +1,13 @@
 
-import  getToken  from '../componets/helpers/login';
-import  getValidateToken from '../componets/helpers/loginValidate'
-import { NominalTable } from './nominalTable';
 import { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom";
 import { Button, Modal, ModalFooter, ModalHeader, ModalBody } from "reactstrap";
+import { NominalTable } from './nominalTable';
+import  getToken  from '../componets/helpers/login';
+import  getValidateToken from '../componets/helpers/loginValidate'
+import { Loader } from '../componets/loader';
+
 
 let token = null;
 
@@ -16,35 +18,36 @@ const setToken = newToken =>{
 
 
 const Login = () => {
-    console.log("Cargando el Componente LOGIN redireccionado por la URL")
+    console.log("Cargando el Componente LOGIN")
     const [modal, setModal] = useState(false);
     const [modalS, setModalS] = useState(false);
     const [msjToken, setMsjToken] = useState(false);
-    const [tokenStorage, setTokenStorage] = useState(false);
+    const [tokenStorage, setTokenStorage] = useState(0);
     const navigate = useNavigate();
 
     useEffect( ()  => {
-        console.log("Use Effect del  Componente LOGIN obtengo Token")
+        console.log("Use Effect del  Componente LOGIN")
         console.log("Variable token en Storage: " +window.localStorage.getItem('tokenLogin')+ "<--")
         if(window.localStorage.getItem('tokenLogin') == null){
-            console.log("Quesegun null")
-            setTokenStorage(false);
+            console.log("Token Null -> Login")
+            setTokenStorage(1); 
         }else{
-            console.log("Quesegun ya existe")
-            setTokenStorage(true); 
+            console.log("Token en LS")
             console.log("Validar Sesion")
             const funcValidaToken = async () => {
                 const validaToken = await  getValidateToken(window.localStorage.getItem('tokenLogin'),3000);
                 const {msj, status} = validaToken
-                console.log("Tiene el Mensaje"+msj+ "mira  "+status)
+                console.log("Mensaje: "+msj+ " status:  "+status)
                 if(validaToken.status == 900){
                     console.log("Token Valido")
+                    setTokenStorage(2);
                 }else{
                         console.log("Token Invalido"+validaToken.status)
                         window.localStorage.removeItem('tokenLogin');
+                        setTokenStorage(1);
                         toggleS();
-                        setMsjToken(validaToken.msj)
-                        navigate("/");
+                        //setMsjToken(validaToken.msj)
+                        //navigate("/");
                 }
             }
               funcValidaToken()
@@ -89,6 +92,7 @@ const Login = () => {
 
 
     const sendLogin = async (dataLogin) => {
+        setTokenStorage(0);
         console.log("Se Envian los parametros del Login al Ws del token:");
         const{ user, pass } = dataLogin;
         try{
@@ -96,10 +100,11 @@ const Login = () => {
             if(serviceLogin.code == 200){
                 console.log("Tenemos un 200 señores");
                 setToken(serviceLogin.token);
-                setTokenStorage(true);
+                setTokenStorage(2);
                 window.localStorage.setItem('tokenLogin',serviceLogin.token);
                 window.localStorage.setItem('nameUser', user);
             }else{
+                setTokenStorage(1);
                 toggle();
                 console.log("No son validas las credenciales");
             }
@@ -175,14 +180,21 @@ const Login = () => {
     )
 
     return  (<div>
-        <div className=" d-flex justify-content-center">
-            <h2> Modulo de consulta Lista Nominal </h2>
-            <hr/>
-        </div>
-        {
-            
-            tokenStorage ? <div><NominalTable/></div> : loginView 
-        }
+                    <div className=" d-flex justify-content-center">
+                        <h2> Modulo de consulta Lista Nominal </h2>
+                        <hr/>
+                    </div>
+                <div>
+                  <div>
+                            {tokenStorage == 0 ? <div className="d-flex justify-content-center"><Loader/></div> : null }
+                  </div>
+                  <div>
+                            {tokenStorage == 1 ? loginView : null}
+                  </div>
+                  <div>
+                            {tokenStorage == 2 ? <div><NominalTable/></div> : null}
+                  </div>      
+                </div>
                
             </div>
             )

@@ -20,7 +20,7 @@ import  Default from  "./pages/Default";
 
 //GifGrid 
 export const GifExpertApp = () =>{
-  console.log(" COMPONENTE PRINCIPAL al cargar la pagina  GiftExperApp");
+  console.log(" COMPONENTE PRINCIPAL al cargar la pagina  P-24");
   const [categories, setCategories] = useState(['Gran Turismo']);
    
     //Se oprime Enter y se Valida si el texto ingresado se encuentra en el arreglo 
@@ -35,6 +35,7 @@ export const GifExpertApp = () =>{
   return (
     <>
     <div>
+      <hr />
       <Routes>
         <Route path="/" element = {<Layout/>} > </Route>
         <Route path="/loginLista" element = {<Login.Login/>} > </Route>

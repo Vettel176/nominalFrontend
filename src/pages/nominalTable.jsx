@@ -11,7 +11,7 @@ import getAfiliacion from '../componets/helpers/getAfiliacion';
 
 export const NominalTable = () => {
   const back = "<";
-  const front = ">";
+  const front = "  >  ";
   const navigate = useNavigate();
   const [modal, setModal] = useState(false);
   const [modalA, setModalA] = useState(false);
@@ -143,10 +143,12 @@ export const NominalTable = () => {
     &nbsp;
     <button className='btn btn-primary' onClick={nextPage}>{front}</button>
     &nbsp;
+    <div className='col-md12'>&nbsp;</div>
     {/* <input type="text" className='mb-5 form-control' placeholder='Buscar por nombre'
     value={search} onChange={ onSearchChange }/> */}
 
-                <table className="table">
+                <div className="table-responsive">
+                <table className="table table-bordered table-striped">
                   <thead >
                     <tr>
                       <th>#</th>
@@ -183,6 +185,7 @@ export const NominalTable = () => {
                               ))}
                   </tbody>
                 </table>
+                </div>
                 </>
         )
 

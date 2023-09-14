@@ -1,5 +1,5 @@
 import { Spinner } from "reactstrap"
 
-export const  loader = () =>{
+export const  Loader = () =>{
     return <Spinner color="primary" >Cargando...</Spinner>
 }

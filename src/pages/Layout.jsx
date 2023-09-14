@@ -1,10 +1,12 @@
 import { Outlet , Link } from "react-router-dom"
 
 const Layout = () => {
+    const labelHome ="Home";
+    const labelNominalList = "Lista Nominal"
     return (
-      <div className="d-flex justify-content-center p-5 text-center">
-        <a href="/" className="button-71">HOME</a>
-        <a href="/loginLista" className="button-71">Lista Nominal</a>
+      <div className="d-flex justify-content-around p-5 text-center">
+        <a href="/" className="button-71">{labelHome}</a>
+        <a href="/loginLista" className="button-71">{labelNominalList}</a>
 
             {/* <ul className="nav justify-content-center ">
                 <li >
