@@ -1,8 +1,9 @@
 
+import { env } from "../../settings/environment";
 export const getValidateToken = async (token) =>{
     console.log("Valores que llegan para el Login: "+token);
-        const url = `https://letmepass.up.railway.app/validateToken`;
-        //const url = `http://localhost:3000/validateToken`;
+        const nameService = "validateTokenNominal";
+        const url = env+nameService;
         const data = {
             token: token
         }

@@ -1,7 +1,8 @@
+import { env } from "../../settings/environment";
 export const getAfiliacion = async (id) =>{
-    console.log("Method AfiliacION eL id QUE SE ENVIA:"+id);
-         const url = `https://letmepass.up.railway.app/nominal/afiliar`; 
-         //const url = `http://localhost:3000/nominal/afiliar`; 
+    console.log("Method Afiliacion el id que se envia: "+id);
+         const serviceName = "nominal/afiliar";
+         const url = env+serviceName; 
         
         const data = {
             idAfiliacion : id

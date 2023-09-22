@@ -1,7 +1,9 @@
+import { env } from "../../settings/environment";
+
 export const getTable = async (nombre,appat,apmat) =>{
     console.log("Valores llegan al getTabla: (Nombre: "+nombre+") (Apellido Paterno: "+appat+")(Apellido Materno: "+apmat+")");
-        const url = `https://letmepass.up.railway.app/nominal/lista`;  
-        //const url = `http://localhost:3000/nominal/lista`; 
+        const nameService = "nominal/lista"
+        const url = env+nameService; 
         const data = {
             name : nombre,
             appat : appat,
