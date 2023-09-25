@@ -6,6 +6,10 @@ import { useForm } from "react-hook-form"
 import { Button, Modal, ModalFooter, ModalHeader, ModalBody } from "reactstrap";
 import getTable from '../componets/helpers/getTable';
 import getAfiliacion from '../componets/helpers/getAfiliacion';
+import editNominal from '../componets/helpers/editNominal';
+import { Edit } from './icons';
+import { ModalEdition } from './modals/ModalEdition';
+
 
 
 
@@ -15,13 +19,13 @@ export const NominalTable = () => {
   const navigate = useNavigate();
   const [modal, setModal] = useState(false);
   const [modalA, setModalA] = useState(false);
+  const [modalEdit, setModalEdit] = useState(false);
   const [filas, setFilas] = useState([{}]);
   const [user, setUser] = useState(null);
   const [currentPage, setCurrenPage] = useState(0);
   const [search, setSearch] = useState('');
   const [dataExist, setDataExist] = useState(0);
-
-
+  const [selected, setSelected] = useState({});
 
   useEffect(() => {
     setUser(window.localStorage.getItem('nameUser'));
@@ -30,6 +34,7 @@ export const NominalTable = () => {
   
   const toggle = () => setModal(!modal);
   const toggleA = () => setModalA(!modalA);
+  const toggleEdit = () => setModalEdit(!modalEdit);
 
   const onClickCloseSession = () =>{
     const user = window.localStorage.getItem('nameUser');
@@ -95,15 +100,13 @@ export const NominalTable = () => {
     setCurrenPage(currentPage - 5);
   }
 
-  // const onSearchChange = ({target}) =>{
-  //   setCurrenPage(0)
-  //   setSearch (target.value)
-  //   console.log("Valor del Input"+ target.value)
-  // }
+  const onClickEdit = ({target}) =>{
+    const select = filas.filter((filas) => filas.id == target.value);
+    setSelected(select);
+    toggleEdit();
+  }
 
   const onClickAfiliar = ({target}) =>{
-    // console.log("Value::"+target.value);
-    // console.log("NAME::"+target.name);
     setIdAfiliado(target.value);
     setNameAfiliado(target.name);
     toggleA();
@@ -156,33 +159,29 @@ export const NominalTable = () => {
                       <th>Clave de Elector</th>
                       <th>Dirección</th>
                       <th>Telefono</th>
-                      <th>Afiliado</th>
-                      
+                      <th>Editar</th>
+                      <th>status</th>
+                      <th> </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {filerData().map(({id,nombres,ClaveElector,direccion,telefono,vota_pt}) =>(
+                    {filerData().map(({id,nombres,ape_pat,ape_mal, ClaveElector,direccion,telefono,vota_pt}) =>(
 
                       <tr key= {id}>
                       {/* <th scope="row">1</th> */}
                       <td>{id}</td>
-                      <td>{nombres}</td>
+                      <td>{nombres+" "+ape_pat+" "+ape_mal}</td>
                       <td>{ClaveElector}</td>
                       <td>{direccion}</td>
                       <td>{telefono}</td>
+                      <td><button className="tim" value={id} onClick={onClickEdit}></button></td>
                       <td>{vota_pt  == 1 ? "Afiliado" : "No afiliado" }</td>
-                      <td>{vota_pt  == 0 ? <button className='btn btn-success'  value={id} name={nombres}
+                      <td>{vota_pt  == 0 ? <button className='btn btn-success' value={id} name={nombres}
                           onClick={onClickAfiliar}>Afiliar</button> : <p> </p> }</td>
-                      {/* <td><button className='btn btn-success' value={id} name={nombres} onClick={(e) => (async () => {
-                             try {
-                               const invoices = await getAfiliacion(id);
-                             } catch (e) {
-                              console.log("Ocurrio un erro espectral al afiliar:"+e)
-                             }
-                           })()} 
-                          >Afiliar</button></td> */}
+
                       </tr>
-                              ))}
+                      
+                        ))}
                   </tbody>
                 </table>
                 </div>
@@ -266,6 +265,28 @@ export const NominalTable = () => {
                     </ModalFooter>
                 </Modal>
             </div >
+            <ModalEdition modalEdit= {modalEdit} toggleEdit = {toggleEdit} 
+                          seleccionado = {selected} />
+            {/* <div>
+                <Modal isOpen={modalEdit}
+                    toggle={toggleEdit} 
+                    modalTransition={{ timeout: 200 }} 
+                    size="lg" style={{maxWidth: '500px', width: '50%'}}>
+                    <ModalHeader color="secondary"
+                        toggle={toggleA}>Editar {' '+ nameAfiliado}
+                    </ModalHeader>
+                    <ModalBody color="primary" >
+                       <input type="text" />
+                       <input type="text" />
+                       <input type="text" />
+                       <input type="text" />
+                       <input type="text" />
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="primary" onClick={onClickSiAfiliar}>Sí</Button>
+                    </ModalFooter>
+                </Modal>
+            </div > */}
     </>
   );
 }
