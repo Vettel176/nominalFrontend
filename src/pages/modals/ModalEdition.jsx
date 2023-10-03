@@ -106,8 +106,12 @@ export const ModalEdition = ({modalEdit,toggleEdit, seleccionado}) => {
                     {errors.secc && <span className='text-danger'>campo obligatorio* </span>}
                 <input   type="hidden"  {...register("id", { required: true })} defaultValue={id} />
                <hr />
-               <Button color="secondary" onClick={toggleEdit}>Cancelar</Button>
-               <Button color="primary" type="submit" className="btn btn-primary" >Editar</Button>
+               <div className="d-flex justify-content-around p-2 text-center">
+               <Button color="secondary" onClick={toggleEdit}>  Cancelar   </Button>
+               <Button color="primary" type="submit" className="btn btn-primary">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Editar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </Button>
+               </div>
+               
+               
             </form>
             </ModalBody>
         </Modal>

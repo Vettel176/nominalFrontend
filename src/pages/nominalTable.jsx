@@ -9,6 +9,7 @@ import getAfiliacion from '../componets/helpers/getAfiliacion';
 import editNominal from '../componets/helpers/editNominal';
 import { Edit } from './icons';
 import { ModalEdition } from './modals/ModalEdition';
+import { ModalDetail } from './modals/ModalDetail';
 
 
 
@@ -20,6 +21,7 @@ export const NominalTable = () => {
   const [modal, setModal] = useState(false);
   const [modalA, setModalA] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
+  const [modalDetail, setModalDetail] = useState(false);
   const [filas, setFilas] = useState([{}]);
   const [user, setUser] = useState(null);
   const [currentPage, setCurrenPage] = useState(0);
@@ -35,6 +37,7 @@ export const NominalTable = () => {
   const toggle = () => setModal(!modal);
   const toggleA = () => setModalA(!modalA);
   const toggleEdit = () => setModalEdit(!modalEdit);
+  const toggleDetail = () => setModalDetail(!modalDetail);
 
   const onClickCloseSession = () =>{
     const user = window.localStorage.getItem('nameUser');
@@ -106,6 +109,14 @@ export const NominalTable = () => {
     toggleEdit();
   }
 
+  
+  const onClickDetalle = ({target}) =>{
+    const select = filas.filter((filas) => filas.id == target.value);
+    setSelected(select);
+    console.log("DETAILLLLL ");
+    toggleDetail();
+  }
+
   const onClickAfiliar = ({target}) =>{
     setIdAfiliado(target.value);
     setNameAfiliado(target.name);
@@ -161,6 +172,7 @@ export const NominalTable = () => {
                       <th>Telefono</th>
                       <th>Editar</th>
                       <th>status</th>
+                      <th>detalle</th>
                       <th> </th>
                     </tr>
                   </thead>
@@ -170,14 +182,15 @@ export const NominalTable = () => {
                       <tr key= {id}>
                       {/* <th scope="row">1</th> */}
                       <td>{id}</td>
-                      <td>{nombres+" "+ape_pat+" "+ape_mal}</td>
+                      <td>{vota_pt  == 1 ? <p style={{color:"red"}}>{nombres+" "+ape_pat+" "+ape_mal}</p> : nombres+" "+ape_pat+" "+ape_mal }</td>
                       <td>{ClaveElector}</td>
                       <td>{direccion}</td>
                       <td>{telefono}</td>
-                      <td><button className="tim" value={id} onClick={onClickEdit}></button></td>
+                      <td><button className="btn btn-success" value={id} onClick={onClickEdit}>Editar</button></td>
                       <td>{vota_pt  == 1 ? "Afiliado" : "No afiliado" }</td>
                       <td>{vota_pt  == 0 ? <button className='btn btn-success' value={id} name={nombres}
                           onClick={onClickAfiliar}>Afiliar</button> : <p> </p> }</td>
+                      <td><button className="btn btn-success" value={id} onClick={onClickDetalle}>Detalle</button></td>
 
                       </tr>
                       
@@ -267,26 +280,9 @@ export const NominalTable = () => {
             </div >
             <ModalEdition modalEdit= {modalEdit} toggleEdit = {toggleEdit} 
                           seleccionado = {selected} />
-            {/* <div>
-                <Modal isOpen={modalEdit}
-                    toggle={toggleEdit} 
-                    modalTransition={{ timeout: 200 }} 
-                    size="lg" style={{maxWidth: '500px', width: '50%'}}>
-                    <ModalHeader color="secondary"
-                        toggle={toggleA}>Editar {' '+ nameAfiliado}
-                    </ModalHeader>
-                    <ModalBody color="primary" >
-                       <input type="text" />
-                       <input type="text" />
-                       <input type="text" />
-                       <input type="text" />
-                       <input type="text" />
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="primary" onClick={onClickSiAfiliar}>Sí</Button>
-                    </ModalFooter>
-                </Modal>
-            </div > */}
+
+            <ModalDetail modalDetail= {modalDetail} toggleDetail = {toggleDetail} 
+                          seleccionado = {selected} />
     </>
   );
 }
