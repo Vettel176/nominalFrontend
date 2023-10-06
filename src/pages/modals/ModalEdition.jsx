@@ -114,9 +114,8 @@ export const ModalEdition = ({modalEdit,toggleEdit, sections, seleccionado, fila
                     
 
                <span>Teléfono</span>
-               {errors.tel && <span className='text-danger'>campo obligatorio* </span>}
-               <input type="text"  {...register("tel", { required: true })} 
-                    className="form-control"maxLength={12} minLength={8}/>
+               <input type="text" 
+                    className="form-control"maxLength={15} minLength={10}/>
                     
 
                 <DropDownSection sections = {sections} seleccionado = {seleccionado}/>  
