@@ -1,32 +1,41 @@
-import { Button, Modal, ModalFooter, ModalHeader, ModalBody } from "reactstrap";
-//id,names,appat,apmat,clave,dir,tel,secc
+import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
+
 import { editNominal } from "../../componets/helpers/editNominal";
 import { useForm } from "react-hook-form"
+import { DropDownSection } from "./DropDownSection";
+import { useState, useEffect} from 'react';
 
+export const ModalEdition = ({modalEdit,toggleEdit, sections, seleccionado } ) => {
 
-export const ModalEdition = ({modalEdit,toggleEdit, seleccionado}) => {
-    //const selection = {seleccionado}
-
-    if(seleccionado[0] != undefined){
-        //console.log(seleccionado[0].id);
-        const {id,nombres, ape_pat,ape_mal,ClaveElector,direccion,telefono, id_seccion} = seleccionado[0];
-        console.log("Values:  ID:"+id+ "Nombres:" +nombres+" apPat: "+ape_pat+" apMat: "+ape_mal+" clave: "+
-            ClaveElector+" dire:"+direccion+" tel:"+telefono);
-    
-    const onClickEdit = () => {
-        console.log("Desde el componente modalEdit"+event.target);
-        //console.log(nombre)
+    let selected = {
+      id:seleccionado.id,
+      nombres:seleccionado.nombres,
+      appat: seleccionado.ape_pat, 
+      apmat:seleccionado.ape_mal,
+      clave:seleccionado.ClaveElector,
+      dir:seleccionado.direccion,
+      tel:seleccionado.telefono
     }
+   
+    const data = selected; 
 
     const {
         register,
         handleSubmit,
         watch,
         formState: { errors },
-      } = useForm();
+      } = useForm(
+        {
+          values: data,
+          resetOptions: {
+            keepDirtyValues: false, // keep dirty fields unchanged, but update defaultValues
+          }
+      }
+      );
 
     const onSubmit = (data) => {
-         console.log("Actualiza...INICIO");
+        data.secc = seleccionado.id_seccion;
+        console.log("Actualiza...INICIO"+seleccionado.id_seccion);
         sendActualizaForm(data);
         console.log("Actualiza...FIN.")
     }
@@ -34,19 +43,20 @@ export const ModalEdition = ({modalEdit,toggleEdit, seleccionado}) => {
     const sendActualizaForm = async (dataEdit) => {
         let nuevasFilas = {};
         try{
-        const afil  = await editNominal(dataEdit);
-        const {actualizados, idAfiliacion} = afil;
+        const responseEditAfil  = await editNominal(dataEdit);
+        const {actualizados, idAfiliacion} = responseEditAfil;
     
         console.log("Respuesta Afiliacion Afectadas: "+ actualizados +"El ID es: " +idAfiliacion);
         if(actualizados == 1){
           console.log("Se encontro alguien")
-          //console.log("Filas: "+filas)
-          nuevasFilas = filas.map(function(regis){
-            if(regis.id == idAfiliacion){
-               regis.vota_pt = 1;
-            }
-            return regis;
-          })
+          console.log("Actualizados: "+actualizados);
+
+          // nuevasFilas = filas.map(function(regis){
+          //   if(regis.id == idAfiliacion){
+          //      regis.vota_pt = 1;
+          //   }
+          //   return regis;
+          // })
           //console.log("Filas Actualizadas:"+nuevasFilas)
         }
         
@@ -71,40 +81,42 @@ export const ModalEdition = ({modalEdit,toggleEdit, seleccionado}) => {
             <ModalBody color="primary">
             <form onSubmit={handleSubmit(onSubmit)}>
                <span>Nombre</span>
-               <input type="text"  {...register("nombres", { required: true })} defaultValue={nombres}
+               {errors.nombres && <span className='text-danger'>campo obligatorio* </span>}
+               <input type="text"  {...register("nombres", { required: true })}
                     className="form-control" maxLength={80} minLength={3}/>
-                    {errors.nombres && <span className='text-danger'>campo obligatorio* </span>}
+                    
 
                <span>Apellido Paterno</span>
-               <input  type="text" {...register("appat", { required: true })} defaultValue={ape_pat}
+               {errors.appat && <span className='text-danger'>campo obligatorio* </span>}
+               <input  type="text"  {...register("appat", { required: true })} 
                     className="form-control" maxLength={25} minLength={3}/>
-                    {errors.appat && <span className='text-danger'>campo obligatorio* </span>}
-
+                    
                <span>Apellido Materno</span>
-               <input  type="text" {...register("apmat", { required: true })} defaultValue={ape_mal}
+               {errors.apmat && <span className='text-danger'>campo obligatorio* </span>}
+               <input  type="text" {...register("apmat", { required: true})} 
                     className="form-control" maxLength={25} minLength={1}/>
-                    {errors.apmat && <span className='text-danger'>campo obligatorio* </span>}
+                    
 
                <span>Clave de Elector</span>
-               <input type="text"  {...register("clave", { required: true })} defaultValue={ClaveElector}
+               {errors.clave && <span className='text-danger'>campo obligatorio* </span>}
+               <input type="text"  {...register("clave", { required: true })} 
                     className="form-control" maxLength={18} minLength={18}/>
-                    {errors.clave && <span className='text-danger'>campo obligatorio* </span>}
+                   
 
                <span>Dirección</span>
-               <input type="text"  {...register("dir", { required: true })} defaultValue={direccion}
+               {errors.dir && <span className='text-danger'>campo obligatorio* </span>}
+               <input type="text"  {...register("dir", { required: true })}
                     className="form-control"maxLength={50} minLength={5}/>
-                    {errors.dir && <span className='text-danger'>campo obligatorio* </span>}
+                    
 
                <span>Teléfono</span>
-               <input type="text"  {...register("tel", { required: true })} defaultValue={telefono}
+               {errors.tel && <span className='text-danger'>campo obligatorio* </span>}
+               <input type="text"  {...register("tel", { required: true })} 
                     className="form-control"maxLength={12} minLength={8}/>
-                    {errors.tel && <span className='text-danger'>campo obligatorio* </span>}
+                    
 
-               <span>Sección</span>
-               <input type="text"  {...register("secc", { required: true })} defaultValue={id_seccion}
-                    className="form-control" maxLength={3} minLength={3}/>
-                    {errors.secc && <span className='text-danger'>campo obligatorio* </span>}
-                <input   type="hidden"  {...register("id", { required: true })} defaultValue={id} />
+                <DropDownSection sections = {sections} seleccionado = {seleccionado}/>  
+
                <hr />
                <div className="d-flex justify-content-around p-2 text-center">
                <Button color="secondary" onClick={toggleEdit}>  Cancelar   </Button>
@@ -117,7 +129,7 @@ export const ModalEdition = ({modalEdit,toggleEdit, seleccionado}) => {
         </Modal>
     </div >
     )
-}else{
-    console.log("Iniciando Selected Undefine")
-}
+// }else{
+//     console.log("Iniciando Selected Undefine")
+// }
 }

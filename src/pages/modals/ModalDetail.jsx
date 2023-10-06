@@ -3,11 +3,14 @@ import { useForm } from "react-hook-form"
 
 export const ModalDetail = ({modalDetail,toggleDetail, seleccionado}) => {
 
-    if(seleccionado[0] != undefined){
+    // if(seleccionado[0] != undefined){
         //console.log(seleccionado[0].id);
-        const {id,nombres, ape_pat,ape_mal,ClaveElector,direccion,telefono, id_seccion} = seleccionado[0];
-        console.log("Values:  ID:"+id+ "Nombres:" +nombres+" apPat: "+ape_pat+" apMat: "+ape_mal+" clave: "+
+        const {id,nombres, ape_pat,ape_mal,ClaveElector,direccion,telefono, id_seccion} = seleccionado;
+        console.log("Values:  ID ModalDetail :"+id+ "Nombres:" +nombres+" apPat: "+ape_pat+" apMat: "+ape_mal+" clave: "+
             ClaveElector+" dire:"+direccion+" tel:"+telefono);
+
+
+            
     const {
         register,
         handleSubmit,
@@ -31,7 +34,7 @@ export const ModalDetail = ({modalDetail,toggleDetail, seleccionado}) => {
             </ModalHeader>
             <ModalBody color="primary">
             <form onSubmit={handleSubmit(onSubmit)}>
-               <input type="text" readOnly defaultValue={nombres}
+               <input type="text" readOnly defaultValue={seleccionado.nombres}
                     className="form-control"/>
                   
                <span>Apellido Paterno</span>
@@ -59,7 +62,7 @@ export const ModalDetail = ({modalDetail,toggleDetail, seleccionado}) => {
                    
                <span>Sección</span>
                <input type="text"  readOnly defaultValue={id_seccion} 
-                      className="form-control"/>   
+                      className="form-control"/>
                <hr />
                <div className="d-flex justify-content-center p-2 text-center">
 
@@ -70,7 +73,7 @@ export const ModalDetail = ({modalDetail,toggleDetail, seleccionado}) => {
         </Modal>
     </div >
     )
-}else{
-    console.log("Iniciando Selected Undefine")
-}
+// }else{
+//     console.log("Iniciando Selected Undefine")
+// }
 }

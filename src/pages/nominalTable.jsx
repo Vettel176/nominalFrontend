@@ -4,7 +4,9 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form"
 import { Button, Modal, ModalFooter, ModalHeader, ModalBody } from "reactstrap";
+
 import getTable from '../componets/helpers/getTable';
+import getSections from '../componets/helpers/getSections';
 import getAfiliacion from '../componets/helpers/getAfiliacion';
 import editNominal from '../componets/helpers/editNominal';
 import { Edit } from './icons';
@@ -28,6 +30,7 @@ export const NominalTable = () => {
   const [search, setSearch] = useState('');
   const [dataExist, setDataExist] = useState(0);
   const [selected, setSelected] = useState({});
+  const [sections, setSections] = useState([]);
 
   useEffect(() => {
     setUser(window.localStorage.getItem('nameUser'));
@@ -74,8 +77,13 @@ export const NominalTable = () => {
         }else{
             setDataExist(2);
             console.log("Sin resultados en la consulta");
-            console.log(serviceConsulta);
-            setFilas(serviceConsulta);
+            if(serviceConsulta.message == undefined){
+                console.log(serviceConsulta);
+                setFilas(serviceConsulta);
+            }else{
+                console.log("Error en espectral:"+serviceConsulta.message)
+            }
+
         }
     }catch(e){
         console.log("Error espectral en el servicio de Consulta: "+ e);
@@ -103,17 +111,33 @@ export const NominalTable = () => {
     setCurrenPage(currentPage - 5);
   }
 
-  const onClickEdit = ({target}) =>{
+  const onClickEdit = async ({target}) =>{
+    console.log("Service get Seccions")
     const select = filas.filter((filas) => filas.id == target.value);
-    setSelected(select);
+    setSelected(select[0]);
+    console.log("El id a enviar es:"+target.name)
+    console.log("El seleccionado es:"+JSON.stringify(select));
+    try{
+      const serviceSection = await getSections(target.name);
+          if(serviceSection.length > 0){
+              setSections(serviceSection)
+              console.log("Imprimiendo los datos de la consulta:getSection:");
+              console.log(serviceSection);
+          }else{
+              console.log("Sin resultados en la consulta de Secciones");
+              console.log(serviceSection);
+          }
+      }catch(e){
+          console.log("Error espectral en el servicio de getSections: "+ e);
+      }
+
     toggleEdit();
   }
 
   
   const onClickDetalle = ({target}) =>{
     const select = filas.filter((filas) => filas.id == target.value);
-    setSelected(select);
-    console.log("DETAILLLLL ");
+    setSelected(select[0]);
     toggleDetail();
   }
 
@@ -177,7 +201,7 @@ export const NominalTable = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {filerData().map(({id,nombres,ape_pat,ape_mal, ClaveElector,direccion,telefono,vota_pt}) =>(
+                    {filerData().map(({id,nombres,ape_pat,ape_mal, ClaveElector,direccion,telefono,vota_pt,afiliado,id_seccion}) =>(
 
                       <tr key= {id}>
                       {/* <th scope="row">1</th> */}
@@ -186,9 +210,9 @@ export const NominalTable = () => {
                       <td>{ClaveElector}</td>
                       <td>{direccion}</td>
                       <td>{telefono}</td>
-                      <td><button className="btn btn-success" value={id} onClick={onClickEdit}>Editar</button></td>
-                      <td>{vota_pt  == 1 ? "Afiliado" : "No afiliado" }</td>
-                      <td>{vota_pt  == 0 ? <button className='btn btn-success' value={id} name={nombres}
+                      <td><button className="btn btn-success" value={id} name= {id_seccion} onClick={onClickEdit}>Editar</button></td>
+                      <td>{afiliado  == 1 ? "Afiliado" : "No afiliado" }</td>
+                      <td>{afiliado  == 0 ? <button className='btn btn-success' value={id} name={nombres}
                           onClick={onClickAfiliar}>Afiliar</button> : <p> </p> }</td>
                       <td><button className="btn btn-success" value={id} onClick={onClickDetalle}>Detalle</button></td>
 
@@ -279,10 +303,12 @@ export const NominalTable = () => {
                 </Modal>
             </div >
             <ModalEdition modalEdit= {modalEdit} toggleEdit = {toggleEdit} 
-                          seleccionado = {selected} />
+                          seleccionado = {selected}  sections={ sections }/>
 
             <ModalDetail modalDetail= {modalDetail} toggleDetail = {toggleDetail} 
                           seleccionado = {selected} />
+
+
     </>
   );
 }
