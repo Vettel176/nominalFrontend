@@ -3,18 +3,13 @@ import { useForm } from "react-hook-form"
 
 export const ModalDetail = ({modalDetail,toggleDetail, seleccionado}) => {
 
-    // if(seleccionado[0] != undefined){
-        //console.log(seleccionado[0].id);
-        const {id,nombres, ape_pat,ape_mal,ClaveElector,direccion,telefono, id_seccion} = seleccionado;
-        console.log("Values:  ID ModalDetail :"+id+ "Nombres:" +nombres+" apPat: "+ape_pat+" apMat: "+ape_mal+" clave: "+
-            ClaveElector+" dire:"+direccion+" tel:"+telefono);
-
-
-            
+    const {id,nombres, ape_pat,ape_mal,ClaveElector,direccion,telefono, id_seccion} = seleccionado;
+    
+    console.log("Values:  ID ModalDetail :"+id+ "Nombres:" +nombres+" apPat: "+
+    ape_pat+" apMat: "+ape_mal+" clave: "+ClaveElector+" dire:"+direccion+" tel:"+telefono);
+      
     const {
-        register,
         handleSubmit,
-        watch,
         formState: { errors },
       } = useForm();
 
@@ -34,7 +29,8 @@ export const ModalDetail = ({modalDetail,toggleDetail, seleccionado}) => {
             </ModalHeader>
             <ModalBody color="primary">
             <form onSubmit={handleSubmit(onSubmit)}>
-               <input type="text" readOnly defaultValue={seleccionado.nombres}
+               <span>Nombres</span>
+               <input type="text" readOnly defaultValue={nombres}
                     className="form-control"/>
                   
                <span>Apellido Paterno</span>
@@ -73,7 +69,4 @@ export const ModalDetail = ({modalDetail,toggleDetail, seleccionado}) => {
         </Modal>
     </div >
     )
-// }else{
-//     console.log("Iniciando Selected Undefine")
-// }
 }

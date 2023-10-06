@@ -158,11 +158,10 @@ export const NominalTable = () => {
 
     console.log("Respuesta Afiliacion Afectadas: "+ actualizados +"El ID es: " +idAfiliacion);
     if(actualizados == 1){
-      console.log("Se encontro alguien")
-      //console.log("Filas: "+filas)
+      console.log("Se encontro alguien para actualizar")
       nuevasFilas = filas.map(function(regis){
         if(regis.id == idAfiliacion){
-           regis.vota_pt = 1;
+           regis.afiliado = 1;
         }
         return regis;
       })
@@ -252,12 +251,6 @@ export const NominalTable = () => {
             </div>
         </div>
         </form>
-    {/* <hr/>
-        <div className='row'>
-          <div className='col-md-12 d-flex justify-content-start'>
-            Bienvenid@ {user}
-          </div>
-        </div> */}
     <hr />
     <div>
       <div>
@@ -303,7 +296,7 @@ export const NominalTable = () => {
                 </Modal>
             </div >
             <ModalEdition modalEdit= {modalEdit} toggleEdit = {toggleEdit} 
-                          seleccionado = {selected}  sections={ sections }/>
+                          seleccionado = {selected}  sections={ sections } filas = {filas}/>
 
             <ModalDetail modalDetail= {modalDetail} toggleDetail = {toggleDetail} 
                           seleccionado = {selected} />

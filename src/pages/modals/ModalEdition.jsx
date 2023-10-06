@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import { DropDownSection } from "./DropDownSection";
 import { useState, useEffect} from 'react';
 
-export const ModalEdition = ({modalEdit,toggleEdit, sections, seleccionado } ) => {
+export const ModalEdition = ({modalEdit,toggleEdit, sections, seleccionado, filas } ) => {
 
     let selected = {
       id:seleccionado.id,
@@ -44,20 +44,24 @@ export const ModalEdition = ({modalEdit,toggleEdit, sections, seleccionado } ) =
         let nuevasFilas = {};
         try{
         const responseEditAfil  = await editNominal(dataEdit);
-        const {actualizados, idAfiliacion} = responseEditAfil;
+        const {actualizados, id} = responseEditAfil;
     
-        console.log("Respuesta Afiliacion Afectadas: "+ actualizados +"El ID es: " +idAfiliacion);
-        if(actualizados == 1){
-          console.log("Se encontro alguien")
-          console.log("Actualizados: "+actualizados);
-
-          // nuevasFilas = filas.map(function(regis){
-          //   if(regis.id == idAfiliacion){
-          //      regis.vota_pt = 1;
-          //   }
-          //   return regis;
-          // })
-          //console.log("Filas Actualizadas:"+nuevasFilas)
+        console.log("Respuesta Afiliacion Afectadas: "+ actualizados +"  El ID es: " +id);
+          if(actualizados == 1){
+            console.log("Se encontro alguien para actualizar")
+            nuevasFilas = filas.map(function(regis){
+              if(regis.id == id){
+                console.log("Editando...INICIO")
+                 regis.nombres = dataEdit.nombres;
+                 regis.ape_pat = dataEdit.appat;
+                 regis.ape_mal = dataEdit.apmat;
+                 regis.ClaveElector = dataEdit.clave;
+                 regis.direccion = dataEdit.dir;
+                 regis.telefono = dataEdit.tel;
+                 console.log("Editando...FIN")
+              }
+              return regis;
+            })
         }
         
         }catch(e){
