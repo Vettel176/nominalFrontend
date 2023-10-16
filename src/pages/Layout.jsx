@@ -1,7 +1,7 @@
 import { Outlet , Link } from "react-router-dom"
 
 const Layout = () => {
-    const labelHome ="Charo";
+    const labelHome ="Tarimbaro";
     const labelNominalList = "Lista Nominal"
     return (
       <div className="d-flex justify-content-around p-5 text-center">
