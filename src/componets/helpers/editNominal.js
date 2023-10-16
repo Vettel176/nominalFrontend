@@ -1,4 +1,4 @@
-import { env } from "../../settings/environment";
+import { env, municipio } from "../../settings/environment";
 export const editNominal = async (newData) =>{
     //id,names,appat,apmat,clave,dir,tel,secc
     //nombres, ape_pat,ape_mal,ClaveElector,direccion,telefono, id_seccion
@@ -10,7 +10,7 @@ export const editNominal = async (newData) =>{
             console.log("Direccion: "+newData.dir);
             console.log("Telefono: "+newData.tel);
             console.log("Seccion: "+newData.secc);
-         const serviceName = "nominal/editar";
+         const serviceName = municipio+"/editar";
          const url = env+serviceName; 
         
         const data = {

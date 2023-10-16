@@ -1,7 +1,7 @@
-import { env } from "../../settings/environment";
+import { env, municipio } from "../../settings/environment";
 export const getSections = async (id) =>{
     console.log("Method getSecciones el id que se envia: "+id);
-         const serviceName = "nominal/getSecciones";
+         const serviceName = municipio+"/getSecciones";
          const url = env+serviceName; 
         
         const data = {
