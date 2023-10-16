@@ -18,4 +18,4 @@ environtment();
 
 export let env = ambiente;
 
-export let municipio = "tarimbaro";
+export let municipio = "charo";

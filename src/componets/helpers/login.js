@@ -8,7 +8,7 @@ export const getToken = async (u, p) =>{
         const data = {
             name : u,
             pass : p,
-            id_place: 1
+            id_place: 4
         }
         const response = await fetch(url, {
           method: "POST", 
