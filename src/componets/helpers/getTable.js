@@ -1,8 +1,8 @@
-import { env } from "../../settings/environment";
+import { env, municipio } from "../../settings/environment";
 
 export const getTable = async (nombre,appat,apmat) =>{
     console.log("Valores llegan al getTabla: (Nombre: "+nombre+") (Apellido Paterno: "+appat+")(Apellido Materno: "+apmat+")");
-        const nameService = "nominal/lista"
+        const nameService = municipio+"/lista"
         const url = env+nameService; 
         const data = {
             name : nombre,
