@@ -181,7 +181,7 @@ const Login = () => {
 
     return  (<div>
                     <div className=" d-flex justify-content-center">
-                        <h2> Modulo de consulta Lista Nominal </h2>
+                        <h2> Modulo de consulta Lista Nominal (CHARO)</h2>
                         <hr/>
                     </div>
                 <div>
