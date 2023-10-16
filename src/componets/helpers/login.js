@@ -7,7 +7,8 @@ export const getToken = async (u, p) =>{
         const url = env+nameService;
         const data = {
             name : u,
-            pass : p
+            pass : p,
+            id_place: 6
         }
         const response = await fetch(url, {
           method: "POST", 
