@@ -6,7 +6,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import  Login  from  "./pages/Login";
 import  Default from  "./pages/Default"; 
-import Close from "./pages/close";
+import Close from "./pages/Close";
 
 
 //se importan los 2 de abajo de un jalon. con archivo de barril
