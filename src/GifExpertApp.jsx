@@ -1,9 +1,12 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { AddCategory, GifGrid } from "./componets";
 import { Route, Routes} from "react-router-dom";
 import  Layout from  "./pages/Layout";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import  Login  from  "./pages/Login";
 import  Default from  "./pages/Default"; 
+import Close from "./pages/close";
 
 
 //se importan los 2 de abajo de un jalon. con archivo de barril
@@ -30,18 +33,19 @@ export const GifExpertApp = () =>{
       if(categories.includes(onNewValue)) return;
       setCategories( [ onNewValue, ...categories]);
     }
+  
+    useEffect(() => {
+      AOS.init();
+    }, [])
 
-   
   return (
     <>
     <div>
-      <hr />
       <Routes>
-        <Route path="/" element = {<Layout/>} > </Route>
-        <Route path="/loginLista" element = {<Login.Login/>} > </Route>
+        <Route path="/" element = {<Login.Login/>} > </Route>
         <Route path="/*" element = {<Default/>} > </Route>
+        <Route path="/close" element = {<Close/>} > </Route>
       </Routes>
-      <hr />
     </div> 
         {/* <AddCategory onNewValue = {(valueSend) => onEnterAddCategoryBox(valueSend)}/>
         

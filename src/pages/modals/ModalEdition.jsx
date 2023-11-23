@@ -78,7 +78,7 @@ export const ModalEdition = ({modalEdit,toggleEdit, sections, seleccionado, fila
         <Modal isOpen={modalEdit}
             toggle={toggleEdit} 
             modalTransition={{ timeout: 200 }} 
-            size="lg" style={{maxWidth: '500px', width: '50%'}}>
+            size="lg">
             <ModalHeader color="secondary"
                 toggle={toggleEdit}> Edicion de:
             </ModalHeader>

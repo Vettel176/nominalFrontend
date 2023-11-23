@@ -7,6 +7,7 @@ import { NominalTable } from './nominalTable';
 import  getToken  from '../componets/helpers/login';
 import  getValidateToken from '../componets/helpers/loginValidate'
 import { Loader } from '../componets/loader';
+import Header from './header';
 
 
 let token = null;
@@ -20,6 +21,7 @@ const setToken = newToken =>{
 const Login = () => {
     console.log("Cargando el Componente LOGIN")
     const [modal, setModal] = useState(false);
+    const [user, setUser] = useState("NA");
     const [modalS, setModalS] = useState(false);
     const [msjToken, setMsjToken] = useState(false);
     const [tokenStorage, setTokenStorage] = useState(0);
@@ -95,6 +97,7 @@ const Login = () => {
         setTokenStorage(0);
         console.log("Se Envian los parametros del Login al Ws del token:");
         const{ user, pass } = dataLogin;
+        setUser(user);
         try{
         const serviceLogin = await getToken(user,pass);
             if(serviceLogin.code == 200){
@@ -115,39 +118,39 @@ const Login = () => {
 
 
     const loginView = (
-        <div>
+        <div className='d-flex justify-content-center pt-5' data-aos="fade-down">
 
-            <form onSubmit={handleSubmit(onSubmit)} className='p-3 bg-light border border-secondary rounded'>
-                    <div className='row'>
-                    <div className="col-md-3"></div>
-                    <div className="col-md-6 p-3"> 
+            <form onSubmit={handleSubmit(onSubmit)} className='p-2 bg-light border border-secondary rounded col-8'>
+                <div className='row'>
+                    
+                    <div className="p-3"> 
                         <input {...register("user", { required: true })} className="form-control" placeholder="Usuario" />
                             {errors.user && <span className='text-danger'>este campo es obligatorio*</span>}
                     </div>
-                        <div className="col-md-3"></div>
-                    </div>
-                    <div className='row'>
-                    <div className="col-md-3"></div>
-                    <div className="col-md-6 p-3">
+                       
+                </div>
+                <div className='row'>
+                    
+                    <div className="p-3">
                         <input type='password' {...register("pass", { required: true })} className="form-control" placeholder="Contraseña"/>
                             {errors.pass && <span className='text-danger'>Ingresa una contraseña</span>}
                             </div>
-                    <div className="col-md-3"></div>
-                    </div>
-                    <div className='row'>
-                    <div className="col-md-3"></div>
-                    <div className="col-md-6 p-3 d-flex justify-content-center">
+                    
+                </div>
+                <div className='row'>
+                   
+                    <div className="p-3 d-flex justify-content-center">
                         <button type="submit" className="btn btn-primary" >Iniciar Sesion</button>
                     </div>
-                    </div>
-                    <div className="col-md-3"></div>
+                </div>
+                    
             </form>
 
             <div>
                 <Modal isOpen={modal}
                     toggle={toggle}
                     modalTransition={{ timeout: 200 }}
-                    size="lg" style={{maxWidth: '500px', width: '50%'}}>
+                    size="lg">
                     <ModalHeader
                         toggle={toggle}>Mensaje
                     </ModalHeader>
@@ -163,7 +166,7 @@ const Login = () => {
             <Modal isOpen={modalS}
                     toggle={toggleS}
                     modalTransition={{ timeout: 100 }}
-                    size="lg" style={{maxWidth: '500px', width: '50%'}}>
+                    size="lg">
                     <ModalHeader
                         toggle={toggleS}>Mensaje
                     </ModalHeader>
@@ -180,9 +183,12 @@ const Login = () => {
     )
 
     return  (<div>
-                    <div className=" d-flex justify-content-center">
-                        <h2> Modulo de consulta Lista Nominal (TARIMBARO)</h2>
-                        <hr/>
+                            {tokenStorage == 2 ? <div data-aos="flip-up"><Header user = {user}/></div> : null}
+                    <br />
+                    <div className="d-flex justify-content-center" data-aos="fade-left">
+                            <p className='subHeader'> T A R I M B A R O </p>
+                    </div>
+                    <div className='col-12'>
                     </div>
                 <div>
                   <div>
@@ -195,7 +201,6 @@ const Login = () => {
                             {tokenStorage == 2 ? <div><NominalTable/></div> : null}
                   </div>      
                 </div>
-               
             </div>
             )
 }

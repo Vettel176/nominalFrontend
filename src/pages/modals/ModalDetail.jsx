@@ -23,7 +23,7 @@ export const ModalDetail = ({modalDetail,toggleDetail, seleccionado}) => {
         <Modal isOpen={modalDetail}
             toggle={toggleDetail} 
             modalTransition={{ timeout: 200 }} 
-            size="lg" style={{maxWidth: '500px', width: '50%'}}>
+            size="lg">
             <ModalHeader color="secondary"
                 toggle={toggleDetail}> Detalle de:
             </ModalHeader>

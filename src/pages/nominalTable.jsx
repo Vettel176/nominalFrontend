@@ -1,5 +1,6 @@
 import * as React from 'react';
 // import { DataGrid } from '@mui/x-data-grid';
+import { ArrowRight, ArrowLeft, Pencil} from 'react-bootstrap-icons';
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form"
@@ -12,6 +13,9 @@ import editNominal from '../componets/helpers/editNominal';
 import { Edit } from './icons';
 import { ModalEdition } from './modals/ModalEdition';
 import { ModalDetail } from './modals/ModalDetail';
+import { EditButton } from './Icons/EditButton';
+import { AfiliarButton } from './Icons/AfiliarButton';
+import { DetailButton } from './Icons/DetailButton';
 
 
 
@@ -47,7 +51,7 @@ export const NominalTable = () => {
     console.log("Usuario es:"+user);
     toggle();
     window.localStorage.removeItem('tokenLogin')
-    navigate("/");
+    navigate("/close");
   }
 
   //Boton consultar Validacion Form
@@ -111,14 +115,14 @@ export const NominalTable = () => {
     setCurrenPage(currentPage - 5);
   }
 
-  const onClickEdit = async ({target}) =>{
+  const onClickEdit = async (idPersona,idSecc) =>{
     console.log("Service get Seccions")
-    const select = filas.filter((filas) => filas.id == target.value);
+    const select = filas.filter((filas) => filas.id == idPersona);
     setSelected(select[0]);
-    console.log("El id a enviar es:"+target.name)
+    console.log("El id a enviar es:"+idSecc)
     console.log("El seleccionado es:"+JSON.stringify(select));
     try{
-      const serviceSection = await getSections(target.name);
+      const serviceSection = await getSections(idSecc);
           if(serviceSection.length > 0){
               setSections(serviceSection)
               console.log("Imprimiendo los datos de la consulta:getSection:");
@@ -135,15 +139,15 @@ export const NominalTable = () => {
   }
 
   
-  const onClickDetalle = ({target}) =>{
-    const select = filas.filter((filas) => filas.id == target.value);
+  const onClickDetalle = (idPersona) =>{
+    const select = filas.filter((filas) => filas.id == idPersona);
     setSelected(select[0]);
     toggleDetail();
   }
 
-  const onClickAfiliar = ({target}) =>{
-    setIdAfiliado(target.value);
-    setNameAfiliado(target.name);
+  const onClickAfiliar = (idPersona, nombres) =>{
+    setIdAfiliado(idPersona);
+    setNameAfiliado(nombres);
     toggleA();
   }
 
@@ -176,27 +180,29 @@ export const NominalTable = () => {
 
   const tableView = (
     <>
-    <button className='btn btn-primary' onClick={backPage}>{back}</button>
-    &nbsp;
-    <button className='btn btn-primary' onClick={nextPage}>{front}</button>
-    &nbsp;
-    <div className='col-md12'>&nbsp;</div>
+
+    <div className='d-flex justify-content-between'>
+      <ArrowLeft   color="royalblue" onClick={backPage} size={50} />
+      <ArrowRight  color="royalblue" onClick={nextPage} size={50} />
+      
+    </div>
+    <div className='col-10'>&nbsp;</div>
     {/* <input type="text" className='mb-5 form-control' placeholder='Buscar por nombre'
     value={search} onChange={ onSearchChange }/> */}
 
-                <div className="table-responsive">
-                <table className="table table-bordered table-striped">
-                  <thead >
-                    <tr>
+              <div className="table-responsive" data-aos="fade-up">
+                <table className="table table-bordered table-striped"  style={{fontSize: '14px'}}>
+                  <thead>
+                    <tr >
                       <th>#</th>
                       <th>Nombre</th>
                       <th>Clave de Elector</th>
                       <th>Dirección</th>
                       <th>Telefono</th>
                       <th>Editar</th>
-                      <th>status</th>
-                      <th>detalle</th>
-                      <th> </th>
+                      <th>Estatus</th>
+                      <th>Afiliar</th>
+                      <th>Detalle</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -209,11 +215,15 @@ export const NominalTable = () => {
                       <td>{ClaveElector}</td>
                       <td>{direccion}</td>
                       <td>{telefono}</td>
-                      <td><button className="btn btn-success" value={id} name= {id_seccion} onClick={onClickEdit}>Editar</button></td>
+                      <td>
+                          <EditButton idPersona = {id} idSecc={id_seccion} editar = {onClickEdit}/>
+                      </td>
                       <td>{afiliado  == 1 ? "Afiliado" : "No afiliado" }</td>
-                      <td>{afiliado  == 0 ? <button className='btn btn-success' value={id} name={nombres}
-                          onClick={onClickAfiliar}>Afiliar</button> : <p> </p> }</td>
-                      <td><button className="btn btn-success" value={id} onClick={onClickDetalle}>Detalle</button></td>
+                      <td>{afiliado  == 0 ? <AfiliarButton idPersona={id} nombres={nombres}  afiliar = {onClickAfiliar}/> : <p> </p> }</td>
+                      <td>
+                        {/* <button className="btn btn-success" value={id} onClick={onClickDetalle}>Detalle</button> */}
+                          <DetailButton idPersona = {id} detalle = {onClickDetalle}/>
+                      </td>
 
                       </tr>
                       
@@ -227,34 +237,31 @@ export const NominalTable = () => {
   return (
     <>
         <form onSubmit={handleSubmit(onSubmit)}>
-        <div className='row'>
-            <div className='col-md-2 d-flex justify-content-center'>
+        <div className='row d-flex justify-content-between'>
+            <div className='col-4 p-2' data-aos="flip-up">
                 <input type="text"  {...register("nombre", { required: true })} className='form-control' placeholder='Nombre'/>
                   {errors.nombre && <span className='text-danger'>*</span>}
             </div>
-            <div className='col-md-2 d-flex justify-content-center'>
-                <input type="text"  {...register("appat", { required: true })} className='form-control' placeholder='Apellido Paterno'/>
+            <div className='col-4 p-2' data-aos="flip-down">
+                <input type="text"  {...register("appat", { required: true })} className='form-control' placeholder='Apellido Pat'/>
                   {errors.appat && <span className='text-danger'>*</span>}
             </div>
-            <div className='col-md-2 d-flex justify-content-center'>
-                <input type="text"  {...register("apmat", { required: true })} className='form-control' placeholder='Apellido Materno'/>
+            <div className='col-4 p-2' data-aos="flip-up">
+                <input type="text"  {...register("apmat", { required: true })} className='form-control' placeholder='Apellido Mat'/>
                 {errors.apmat && <span className='text-danger'>*</span>}
             </div>
-            <div className='col-md-2 d-flex justify-content-center'>
-              <button   className="btn btn-success"> Consultar </button>
-            </div>
-            <div className='col-md-2 d-flex justify-content-start'>
-                  Bienvenid@ {user}
-            </div>
-            <div className='col-md-2 d-flex justify-content-end'>
-              <button  className="btn btn-primary" onClick={toggle}> Cerrar Sesion </button>
+        </div>
+        <br />
+        <div>
+            <div className='col-12 d-flex justify-content-center' data-aos="fade-up">
+              <button   className="button-43"> Consultar </button>
             </div>
         </div>
         </form>
     <hr />
     <div>
       <div>
-                {dataExist == 0 ? <div>Realice una Consulta</div> : null }
+                {dataExist == 0 ? <div className='d-flex justify-content-center'>Realice una Consulta</div> : null }
       </div>
       <div>
                 {dataExist == 1 ? tableView : null}
@@ -267,12 +274,12 @@ export const NominalTable = () => {
                 <Modal isOpen={modal}
                     toggle={toggle} 
                     modalTransition={{ timeout: 200 }} 
-                    size="lg" style={{maxWidth: '500px', width: '50%'}}>
+                    size="md" >
                     <ModalHeader color="secondary"
                         toggle={toggle}>Mensaje
                     </ModalHeader>
                     <ModalBody color="primary" >
-                        {user+ " "}¿Desea Cerrar Sesion?
+                      ¿Desea Cerrar Sesion?
                     </ModalBody>
                     <ModalFooter>
                         <Button color="primary" onClick={onClickCloseSession}>Aceptar</Button>
@@ -283,7 +290,7 @@ export const NominalTable = () => {
                 <Modal isOpen={modalA}
                     toggle={toggleA} 
                     modalTransition={{ timeout: 200 }} 
-                    size="lg" style={{maxWidth: '500px', width: '50%'}}>
+                    size="md">
                     <ModalHeader color="secondary"
                         toggle={toggleA}>Mensaje
                     </ModalHeader>
