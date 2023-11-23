@@ -261,7 +261,7 @@ export const NominalTable = () => {
     <hr />
     <div>
       <div>
-                {dataExist == 0 ? <div className='d-flex justify-content-center'>Realice una Consulta</div> : null }
+                {dataExist == 0 ? <div className='d-flex justify-content-center subHeader2'>Realice una Consulta</div> : null }
       </div>
       <div>
                 {dataExist == 1 ? tableView : null}

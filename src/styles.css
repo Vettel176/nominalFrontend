@@ -134,20 +134,7 @@
 
 }
 .header{
-  background-image: url(src/img/bgHeader.jpg);
-  background-size:cover;
-      -webkit-animation: slidein 100s;
-      animation: slidein 40s;
-
-      -webkit-animation-fill-mode: forwards;
-      animation-fill-mode: forwards;
-
-      -webkit-animation-iteration-count: infinite;
-      animation-iteration-count: infinite;
-
-      -webkit-animation-direction: alternate;
-      animation-direction: alternate; 
-  background-color: #0d49a3c4;
+  background-color: #3742e6;
   border-radius: .50rem;
 }
 
@@ -159,12 +146,19 @@
 }
 
 .subHeader{
-  color: aquamarine;
+  color: rgb(0, 241, 161);
   margin-bottom: 0%;
   font-size: 30px;
   font-family: 'Source Code Pro', monospace;
   text-transform:uppercase;
-  text-shadow: rgb(204, 212, 191) 1px 0 10px;
+  text-shadow: rgb(0, 255, 85);
+}
+
+.subHeader2{
+  color: rgb(0, 104, 69);
+  margin-bottom: 0%;
+  font-size: 15px;
+  font-family: 'Source Code Pro', monospace;
 }
 
 

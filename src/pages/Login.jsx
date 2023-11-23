@@ -116,6 +116,22 @@ const Login = () => {
         }
     }
 
+    const viewListIn = (
+        <div className="row" data-aos="fade-left">
+            <p className='subHeader d-flex justify-content-center'> LISTA NOMINAL </p>
+            <p className='subHeader2 d-flex justify-content-center'> En este bloque puedes buscar a un ciudadano y afiliarlo al partido</p>
+            <br />
+            <br />
+        </div>
+    )
+
+    const viewMunicipio = (
+        <div className="row" data-aos="fade-right">
+            <p className='subHeader d-flex justify-content-center'> T A R I M B A R O </p>
+        </div>
+
+    )
+
 
     const loginView = (
         <div className='d-flex justify-content-center pt-5' data-aos="fade-down">
@@ -182,14 +198,11 @@ const Login = () => {
         </div>
     )
 
-    return  (<div>
-                            {tokenStorage == 2 ? <div data-aos="flip-up"><Header user = {user}/></div> : null}
-                    <br />
-                    <div className="d-flex justify-content-center" data-aos="fade-left">
-                            <p className='subHeader'> T A R I M B A R O </p>
-                    </div>
-                    <div className='col-12'>
-                    </div>
+    return  (
+                <div>
+                    {tokenStorage == 2 ? <div data-aos="flip-up"><Header user = {user}/></div> : null}
+                    <br/>
+                    {tokenStorage == 2 ? viewListIn : viewMunicipio}
                 <div>
                   <div>
                             {tokenStorage == 0 ? <div className="d-flex justify-content-center"><Loader/></div> : null }
